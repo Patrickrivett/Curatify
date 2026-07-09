@@ -5,3 +5,30 @@ Spotify's algorithmic recommendations such as Daily Mixes, Discover Weekly, Rele
 
 ## 2. Proposed Solution
 A web application that connects to Spotify via OAuth and builds a user's ‘Taste Profile’ from their top artists and the genre tags associated with those artists. Instead of generating new playlists algorithmically, the app searches Spotify for existing public, human-curated playlists and ranks them using a Soulmate Score: the percentage of a playlist's genres/artists that overlap with the user's Taste Profile. Each playlist also displays a Surprise Factor which is the percentage of its tracks by artists the user doesn't already listen to, so users can see how much genuinely new material a playlist offers on top of its taste match, without that number affecting the ranking itself. The goal is to connect users with playlists made by real people whose taste aligns with theirs, addressing both failures of Spotify's own recommendations for users: Daily Mixes' lack of variety and Discover Weekly's unreliable taste-matching. Users log in, see a dashboard summarising their taste profile (top genres/artists), and are shown a card-based grid of ranked playlists they can save to their Spotify library or bookmark for later.
+
+
+
+
+## 4. Architecture
+```mermaid
+erDiagram
+    USERS ||--o{ SAVED_PLAYLISTS : saves
+    USERS {
+        uuid id PK
+        text spotify_id UK
+        text display_name
+        text email
+        text refresh_token
+        timestamp created_at
+    }
+    SAVED_PLAYLISTS {
+        uuid id PK
+        uuid user_id FK
+        text playlist_id
+        text playlist_name
+        text playlist_creator
+        float soulmate_score
+        text snapshot_id
+        timestamp saved_at
+    }
+```
