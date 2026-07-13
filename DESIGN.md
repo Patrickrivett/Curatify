@@ -14,8 +14,10 @@ A web application that connects to Spotify via OAuth and builds a user's ‘Tast
  - **Dashboard:** user's top genres and top artists, displayed as simple lists/tags.
  - **Results Page:** card grid of playlists. Each card shows playlist name, creator, Soulmate Score (%), Surprise Factor (%), and two buttons: "Save to Library" (adds directly via Spotify API)
 
-[Figma Mockup Here]
-
+The following are links to the Figma Mockups:
+Visit [this link](https://drive.google.com/file/d/13CEoNT1A5qXJdjSl6V95z2PbcqV_s-2_/view?usp=drive_link) to see the login page.
+Visit [this link](https://drive.google.com/file/d/1KRSTRgYsR4VmbnN9qE6tpSNBv3mijEZv/view?usp=drive_link) to see the dashboard.
+Visit [this link](https://drive.google.com/file/d/1Z2bPFdgIx8TdXrM-zXB-bYDLoLFJ9Yak/view?usp=drive_link) to see the  playlists page.
 
 ## 3. User Flows
 1. User logs in with Spotify
