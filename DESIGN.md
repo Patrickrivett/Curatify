@@ -10,7 +10,7 @@ A web application that connects to Spotify via OAuth and builds a user's ‘Tast
 
 
 ### UI Description:
- - **Landing Page:*** app name, one-line pitch, "Login with Spotify" button.
+ - **Landing Page:** app name, one-line pitch, "Login with Spotify" button.
  - **Dashboard:** user's top genres and top artists, displayed as simple lists/tags.
  - **Results Page:** card grid of playlists. Each card shows playlist name, creator, Soulmate Score (%), Surprise Factor (%), and two buttons: "Save to Library" (adds directly via Spotify API)
 
@@ -118,7 +118,20 @@ erDiagram
     - For example, when a user clicks “Save Playlist”, our frontend sends the playlist to our backend so it knows which playlist to bookmark, but it won’t blindly trust what gets sent, so before saving anything it will check if the ID actually looks like a real Spotify playlist ID (a fixed length string of numbers and letters). If it doesn’t match, it will reject it. Furthermore, we will prevent SQL injection through using parameterised queries (using placeholders instead of directly embedding playlist IDs) to ensure user-supplied input is treated strictly as data and not executable code. 
 
 
-## 8. Branch Protections (do we need to include this?) 
+## 8. Branch Protections
+- Require pull request reviews before merging
+ - All changes must be submitted via pull request
+ - No direct pushes to main are allowed
+ - Requires at least 1 approving review before merging
+- Dismiss stale pull request approvals when new commits are pushed
+ - If a reviewer approves a PR, but then new code is pushed, the approval is automatically dismissed
+ - This ensures reviewers see the final version of the code before merging
+- Require branches to be up to date before merging
+  - The PR branch must be up to date with main before it can be merged
+  - Prevents merging code that might conflict with recent changes
+- Include administrators in these rules
+  - Even repository administrators must follow these rules
+  - Ensures no one can bypass the review process
 
 
 ## 9. Open Questions
