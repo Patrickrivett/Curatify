@@ -7,10 +7,16 @@ Spotify's algorithmic recommendations such as Daily Mixes, Discover Weekly, Rele
 ## 2. Proposed Solution
 A web application that connects to Spotify via OAuth and builds a user's ‘Taste Profile’ from their top artists and the genre tags associated with those artists. Instead of generating new playlists algorithmically, the app searches Spotify for existing public, human-curated playlists and ranks them using a Compatibility: the percentage of a playlist's genres/artists that overlap with the user's Taste Profile. Each playlist also displays a Discovery Rate which is the percentage of its tracks by artists the user doesn't already listen to, so users can see how much genuinely new material a playlist offers on top of its taste match, without that number affecting the ranking itself. The goal is to connect users with playlists made by real people whose taste aligns with theirs, addressing both failures of Spotify's own recommendations for users: Daily Mixes' lack of variety and Discover Weekly's unreliable taste-matching. Users log in, see a dashboard summarising their taste profile (top genres/artists), and are shown a card-based grid of ranked playlists they can save to their Spotify library or bookmark for later.
 
-$$\text{Soulmate Score} = \frac{\text{overlapping genres/artists}}{\text{playlist's total genre/artist count}} \times 100$$
+$$\text{Compatibility} = \frac{\text{overlapping genres/artists}}{\text{playlist's total genre/artist count}} \times 100$$
+- ex.
+   - User's Taste Profile genres: rap, indie folk, alternative
+   - Playlist's genres: indie folk, pop, alternative, electropop
+   - Overlap: 2 (indie folk, alternative) out of 4 of the playlist's total genres match user taste, so Compatibility = 2 ÷ 4 × 100 = 50%
+   - Affects ranking
 
-$$\text{Surprise Factor} = \frac{\text{unheard tracks in playlist}}{\text{total tracks in playlist}} \times 100$$
-
+$$\text{Discovery Rate} = \frac{\text{unheard tracks in playlist}}{\text{total tracks in playlist}} \times 100$$
+- ex. A playlist with 20 tracks where 6 tracks are by artists the user has never listened to, so Discovery Rate = 6 ÷ 20 × 100 = 30%
+- Doesn't affect ranking
 
 ### UI Description:
  - **Landing Page:** app name, one-line pitch, "Login with Spotify" button.
@@ -18,9 +24,9 @@ $$\text{Surprise Factor} = \frac{\text{unheard tracks in playlist}}{\text{total 
  - **Results Page:** card grid of playlists. Each card shows playlist name, creator, Compatibility (%), Discovery Rate (%), and two buttons: "Save to Library" (adds directly via Spotify API)
 
 The following are links to the Figma Mockups:
-Visit [this link](https://drive.google.com/file/d/13CEoNT1A5qXJdjSl6V95z2PbcqV_s-2_/view?usp=drive_link) to see the login page.
-Visit [this link](https://drive.google.com/file/d/1KRSTRgYsR4VmbnN9qE6tpSNBv3mijEZv/view?usp=drive_link) to see the dashboard.
-Visit [this link](https://drive.google.com/file/d/1Z2bPFdgIx8TdXrM-zXB-bYDLoLFJ9Yak/view?usp=drive_link) to see the  playlists page.
+- Visit [this link](https://drive.google.com/file/d/13CEoNT1A5qXJdjSl6V95z2PbcqV_s-2_/view?usp=drive_link) to see the login page.
+- Visit [this link](https://drive.google.com/file/d/1KRSTRgYsR4VmbnN9qE6tpSNBv3mijEZv/view?usp=drive_link) to see the dashboard.
+- Visit [this link](https://drive.google.com/file/d/1Z2bPFdgIx8TdXrM-zXB-bYDLoLFJ9Yak/view?usp=drive_link) to see the playlists page.
 
 ## 3. User Flows
 1. User logs in with Spotify
@@ -116,7 +122,7 @@ erDiagram
 - Authorization: Every database row will be tied to a user ID, so that the user can only access what is theirs. There won’t be a search function, so the only concern is showing the user what they are meant to be seeing. Since we are using Spotify OAuth, the token the backend is given tied to their account will only allow for their info to be accessed.
 - Sensitive Data: We will store the user ID, an access token, a refresh token, playlist/song metadata, and recommendation history. We are not storing passwords. We will be hiding the CLIENT_ID and CLIENT_SECRET that Curatify uses to communicate with spotify. Our database URL will also be hidden.
 - Exposed Endpoints: /auth/login and /auth/callback are intentionally public (they're part of the login flow so they must be reachable by anybody in order to get the user logged in). All /api/* endpoints are checked for a valid authenticated session/token because they deal with personal data, if it’s missing or invalid (unauthenticated requests) it returns a 401 (unauthorised error) rather than any data.
-    - For example, a stranger cannot type our API’s URL directly into their browser and see someone else’s saved playlists. So the backend checks: “does this request include a valid token proving who you are?”
+    - For example, an unauthorized user cannot type our API’s URL directly into their browser and see someone else’s saved playlists. So the backend checks: “does this request include a valid token proving who you are?”
 - Input Validation: The only user input we accept is the Spotify ID of playlists which will be validated against expected Spotify ID format.
     - For example, when a user clicks “Save Playlist”, our frontend sends the playlist to our backend so it knows which playlist to bookmark, but it won’t blindly trust what gets sent, so before saving anything it will check if the ID actually looks like a real Spotify playlist ID (a fixed length string of numbers and letters). If it doesn’t match, it will reject it. Furthermore, we will prevent SQL injection through using parameterised queries (using placeholders instead of directly embedding playlist IDs) to ensure user-supplied input is treated strictly as data and not executable code. 
 
