@@ -77,8 +77,7 @@ erDiagram
         text playlist_id
         text playlist_name
         text playlist_creator
-        float soulmate_score
-        text snapshot_id
+        float compatibility_score
         timestamp saved_at
     }
 ```
