@@ -101,7 +101,7 @@ erDiagram
 
 
 ## 6. Out of Scope 
-- We are NOT building 
+- We are NOT building: 
     - Social features
     - Algorithmically-generated playlists (we are deliberately filtering these out)
     - User accounts separate from Spotify
