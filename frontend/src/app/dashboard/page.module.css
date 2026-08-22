@@ -1,80 +1,21 @@
 .main {
   min-height: 100vh;
-  padding: 48px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.wordmark {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #6b4ee6;
-  margin-bottom: 32px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
   width: 100%;
-  max-width: 800px;
-}
-
-.card {
-  border-radius: 16px;
-  padding: 24px;
-  background: #ede9fe;
-  color: #1f2937;
+  padding: 48px clamp(24px, 5vw, 64px);
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.cardAccent {
-  background: linear-gradient(135deg, #d8b4fe, #f0abfc);
-}
-
-.cardTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.95rem;
-}
-
-.bigNumber {
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-.recentSection {
-  width: 100%;
-  max-width: 800px;
-  margin-top: 32px;
-}
-
-.recentHeading {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 16px;
 }
 
 .scrollRow {
   display: flex;
+  flex-wrap: nowrap;
   gap: 16px;
   overflow-x: auto;
-  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding: 16px 0 24px;
   scroll-snap-type: x mandatory;
 }
 
@@ -82,39 +23,84 @@
   flex: 0 0 auto;
   width: 140px;
   scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.albumCard:hover {
+  transform: translateY(-6px);
 }
 
 .albumCover {
   border-radius: 10px;
   object-fit: cover;
   margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.2s ease;
 }
 
-.albumName {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #1f2937;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.albumCard:hover .albumCover {
+  transform: rotate(var(--tilt, 0deg)) translateY(-6px);
 }
 
-.albumArtist {
-  font-size: 0.8rem;
-  color: #6b7280;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.albumName { 
+  font-family: var(--font-body), sans-serif; 
+  font-weight: 600; 
+  font-size: 0.85rem; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; }
+
+
+.albumArtist { 
+  font-family: var(--font-body), sans-serif; 
+  font-size: 0.8rem; 
+  color: var(--muted); 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 16px; 
+}
+
+.card { 
+  background: var(--surface); 
+  border: 1px solid var(--line); 
+  border-radius: 12px; 
+  padding: 20px; 
+}
+
+.list { 
+  list-style: none; 
+  padding: 0; 
+  margin-top: 12px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+  font-family: var(--font-body), sans-serif; 
+  font-size: 0.95rem; 
+}
+
+.bigNumber { 
+  font-family: var(--font-display), serif; 
+  font-weight: 700; 
+  font-size: 2.5rem; 
+  color: var(--gold); 
+  margin-top: 8px; 
 }
 
 .ctaButton {
+  display: inline-block; 
   margin-top: 32px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 999px;
-  padding: 12px 28px;
-  text-decoration: none;
-  color: #1f2937;
-  font-weight: 500;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: var(--rust); 
+  border-radius: 999px; padding: 12px 28px;
+  text-decoration: none; 
+  color: var(--cream);
+  font-family: var(--font-body), sans-serif; 
+  font-weight: 600;
 }

@@ -1,58 +1,87 @@
 .main {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   padding: 24px;
 }
 
+.glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(191, 78, 35, 0.18), transparent 45%),
+    radial-gradient(circle at 70% 70%, rgba(212, 167, 44, 0.12), transparent 45%);
+  pointer-events: none;
+}
+
 .content {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 4px;
+  max-width: 520px;
 }
 
-.logo {
-  font-size: 3.5rem;
-  font-weight: 600;
-  color: #6b4ee6;
-  letter-spacing: -0.02em;
-  margin: 0;
+.mark {
+  width: 90px;
+  height: 0px;
+  margin-bottom: 20px;
+  animation: spin 12s linear infinite;
+}
+
+.wordmark {
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: 6.5rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: var(--cream);
+  text-shadow:
+    3px 3px 0 var(--rust),
+    6px 6px 0 var(--gold);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .tagline {
-  font-size: 1.1rem;
-  color: #6b7280;
-  margin: 0 0 40px 0;
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--rust);
+  margin-bottom: 28px;
+}
+
+.pitch {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 40px;
 }
 
 .spotifyButton {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  gap: 10px;
+  background: #1db954;
   border-radius: 999px;
-  padding: 12px 24px;
+  padding: 14px 32px;
   text-decoration: none;
-  color: #1f2937;
-  font-weight: 500;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.15s ease;
+  color: #0b0b0b;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
 }
 
-.spotifyButton:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.spotifyIcon {
-  width: 24px;
-  height: 24px;
-  fill: #1db954;
-}
-
-.arrow {
-  color: #9ca3af;
+.spotifyIcon { 
+  width: 20px; 
+  height: 20px; 
+  fill: #0b0b0b; 
 }
