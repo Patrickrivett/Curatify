@@ -85,3 +85,11 @@
   height: 20px; 
   fill: #0b0b0b; 
 }
+
+.code {
+  font-family: var(--font-geist-mono);
+  font-size: 0.9em;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+}
