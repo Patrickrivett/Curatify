@@ -1,27 +1,56 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/session'
+import { db } from '@/db'
+import { artistGenreCache } from '@/db/schema'
+import { eq } from 'drizzle-orm'
+
+const CACHE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
 
 async function getLastfmTags(artistName: string): Promise<string[]> {
-    const params = new URLSearchParams({
-      method: 'artist.gettoptags',
-      artist: artistName,
-      api_key: process.env.LASTFM_API_KEY!,
-      format: 'json',
-    })
-  
-    try {
-      const res = await fetch(`https://ws.audioscrobbler.com/2.0/?${params.toString()}`)
-      if (!res.ok) return []
-  
-      const data = await res.json()
-      const tags = data.toptags?.tag ?? []
-  
-      // Take just the top 3 tags, lowercase them for consistent matching later
-      return tags.slice(0, 3).map((t: { name: string }) => t.name.toLowerCase())
-    } catch {
-      return []
+  // Check the cache first
+  const cached = await db
+    .select()
+    .from(artistGenreCache)
+    .where(eq(artistGenreCache.artistName, artistName))
+
+  if (cached.length > 0) {
+    const age = Date.now() - new Date(cached[0].fetchedAt!).getTime()
+    if (age < CACHE_MAX_AGE_MS) {
+      return cached[0].genres
     }
   }
+
+  // Cache miss (or stale) — fetch fresh from Last.fm
+  const params = new URLSearchParams({
+    method: 'artist.gettoptags',
+    artist: artistName,
+    api_key: process.env.LASTFM_API_KEY!,
+    format: 'json',
+  })
+
+  let tags: string[] = []
+  try {
+    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?${params.toString()}`)
+    if (res.ok) {
+      const data = await res.json()
+      const rawTags = data.toptags?.tag ?? []
+      tags = rawTags.slice(0, 3).map((t: { name: string }) => t.name.toLowerCase())
+    }
+  } catch {
+    tags = []
+  }
+
+  // Store in cache for next time (upsert, in case of a stale row)
+  await db
+    .insert(artistGenreCache)
+    .values({ artistName, genres: tags })
+    .onConflictDoUpdate({
+      target: artistGenreCache.artistName,
+      set: { genres: tags, fetchedAt: new Date() },
+    })
+
+  return tags
+}
 
 export async function GET() {
   const session = await getSession()

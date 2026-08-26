@@ -18,3 +18,10 @@ export const savedPlaylists = pgTable('saved_playlists', {
   compatibilityScore: real('compatibility_score'),
   savedAt: timestamp('saved_at').defaultNow(),
 })
+
+export const artistGenreCache = pgTable('artist_genre_cache', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  artistName: text('artist_name').notNull().unique(),
+  genres: text('genres').array().notNull(),
+  fetchedAt: timestamp('fetched_at').defaultNow(),
+})
