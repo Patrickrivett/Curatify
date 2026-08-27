@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { db } from '@/db'
 import { artistGenreCache } from '@/db/schema'
 import { eq } from 'drizzle-orm'
+import { getCandidatePlaylists } from '@/lib/spotify'
 
 const CACHE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000 // 30 days
 
@@ -83,6 +84,7 @@ export async function GET() {
   const tokenData = await tokenResponse.json()
   const accessToken = tokenData.access_token
 
+
   // Fetch the user's top artists (medium_term = last ~6 months, per the design doc)
   const topArtistsResponse = await fetch(
     'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20',
@@ -124,3 +126,5 @@ export async function GET() {
     topGenres,
   })
 }
+
+
